@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import TodoItems from "./TodoItems";
+import TodoParent from './TodoParent';
 import "./TodoList.css";
+import axios from 'axios';
 
 class TodoList extends Component {
 
@@ -8,17 +10,19 @@ class TodoList extends Component {
     super(props);
 
     this.state = {
-      items: []
+      items: [],
+      activeList: 1
     };
 
     this.addItem = this.addItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+
   }
 
-  addItem(e) {
-    if (this._inputElement.value !== "") {
+  addItem(todoItem) {
+    if (this.inputElement.value !== "") {
       var newItem = {
-        text: this._inputElement.value,
+        text: this.inputElement.value,
         key: Date.now()
       };
 
@@ -28,12 +32,11 @@ class TodoList extends Component {
         };
       });
 
-      this._inputElement.value = "";
+      this.inputElement.value = "";
     }
 
     console.log(this.state.items);
-
-    e.preventDefault();
+    todoItem.preventDefault();
   }
 
   deleteItem(key) {
@@ -46,18 +49,36 @@ class TodoList extends Component {
     });
   }
 
+  // Test out hitting the API //
+  componentDidMount(){
+    this.viewList();
+  }
+
+  viewList() {
+    axios.get(`http://localhost:8000/api/8`)
+    .then(res => {
+            const listItem = res.data;
+            this.setState({ listItem });
+          })
+    .then(response => response.json())
+    .then(parsedJSON => console.log(parsedJSON.results))
+    .then(console.log("list item " + this.listItem))
+    .catch(error => console.log(error))
+  }
+
   render() {
     return (
       <div className="todoListMain">
         <div className="header">
           <form onSubmit={this.addItem}>
-            <input ref={(a) => this._inputElement = a}  placeholder="enter task">
+            <input ref={(a) => this.inputElement = a}  placeholder="Enter Task">
             </input>
-            <button type="submit">add</button>
+            <button type="submit">Add Item</button>
+            <br />
+            <TodoParent />
           </form>
         </div>
-        <TodoItems entries={this.state.items}
-                 delete={this.deleteItem}/>
+        <TodoItems entries={this.state.items} delete={this.deleteItem} />
       </div>
     );
   }

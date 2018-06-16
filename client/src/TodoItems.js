@@ -1,35 +1,41 @@
 import React, { Component } from "react";
+import axios from 'axios';
+import TodoParent from './TodoParent';
 
 class TodoItems extends Component {
-  constructor(props) {
+    constructor(props) {
     super(props);
 
     this.createTasks = this.createTasks.bind(this);
   }
 
+  // Need to create a list if it doesn't exist //
+  createList(item) {
+
+  }
+
   createTasks(item) {
-    fetch('http://localhost:8000/api/1/')
-    .then(response => response.json())
-    .then(parsedJSON => console.log(parsedJSON.results))
-    .catch(error => console.log(error))
+    var state = {
+      listId: '',
+      taskContent: '',
+    }
+
+    var handleChange = event => {
+      this.setState({ listId: event.target.value });
+    }
+
+    axios.post('http://localhost:8000/api/todos/' + state.listId)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+
     return <li onClick={() => this.delete(item.key)}
                 key={item.key}>{item.text}</li>
-  }
+    }
 
   delete(key) {
     this.props.delete(key);
-  }
-
-  // Test out hitting the API //
-  componentDidMount(){
-    this.fetchData();
-  }
-
-  fetchData() {
-    fetch('http://localhost:8000/')
-    .then(response => response.json())
-    .then(parsedJSON => console.log(parsedJSON.results))
-    .catch(error => console.log(error))
   }
 
   render() {
