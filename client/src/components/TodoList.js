@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import TodoItems from "./TodoItems";
-import TodoParent from './TodoParent';
-import "./TodoList.css";
+import SwitchList from './SwitchList';
+import "../TodoList.css";
 import axios from 'axios';
 
 class TodoList extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       items: [],
-      activeList: 1
+      listId: 1
     };
 
     this.addItem = this.addItem.bind(this);
@@ -66,19 +65,27 @@ class TodoList extends Component {
     .catch(error => console.log(error))
   }
 
+// this updates listId, and  need to update listId in TodoItems
+  onChangeList(newList) {
+    this.setState({
+      listId: newList
+    });
+  }
+
   render() {
+    console.log("List Id in TodoList: " + this.state.listId);
     return (
       <div className="todoListMain">
         <div className="header">
           <form onSubmit={this.addItem}>
             <input ref={(a) => this.inputElement = a}  placeholder="Enter Task">
             </input>
-            <button type="submit">Add Item</button>
+            <button type="submit" className="btn btn-primary Button">Add Item</button>
             <br />
-            <TodoParent />
+            <SwitchList initialList={this.state.listId} changeList={this.onChangeList.bind(this)}/>
           </form>
         </div>
-        <TodoItems entries={this.state.items} delete={this.deleteItem} />
+        <TodoItems listId={this.state.listId} entries={this.state.items} delete={this.deleteItem} />
       </div>
     );
   }
