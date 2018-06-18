@@ -12,10 +12,8 @@ class TodoList extends Component {
       items: [],
       listId: 1
     };
-
     this.addItem = this.addItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
-
   }
 
   addItem(todoItem) {
@@ -75,15 +73,20 @@ class TodoList extends Component {
   render() {
     console.log("List Id in TodoList: " + this.state.listId);
     return (
-      <div className="todoListMain">
-        <div className="header">
+      <div className="todoListMain row">
+        <div className="col-lg-6">
           <form onSubmit={this.addItem}>
-            <input ref={(a) => this.inputElement = a}  placeholder="Enter Task">
-            </input>
-            <button type="submit" className="btn btn-primary Button">Add Item</button>
-            <br />
-            <SwitchList initialList={this.state.listId} changeList={this.onChangeList.bind(this)}/>
+            <div className="input-group">
+                  <input className="form-control" ref={(a) => this.inputElement = a}  placeholder="Enter Task">
+                  </input>
+                  <span className="input-group-btn">
+                    <button type="submit" className="btn btn-primary Button">Add Item</button>
+                  </span>
+            </div>
           </form>
+          </div>
+        <div>
+            <SwitchList initialList={this.state.listId} changeList={this.onChangeList.bind(this)}/>
         </div>
         <TodoItems listId={this.state.listId} entries={this.state.items} delete={this.deleteItem} />
       </div>

@@ -13,7 +13,6 @@ class SwitchList extends Component {
     };
   }
 
-
   // get data from whatever the input is
   onChangeListId() {
     this.props.changeList(this.state.listId),
@@ -34,11 +33,17 @@ class SwitchList extends Component {
   // input is set by user here
   render() {
     return (
-      <div>
-        <input type="text" value={this.state.listId}
-          onChange={(event) => this.onHandleChange(event)}></input>
-        <button className='btn btn-primary Button' onClick={this.onChangeListId.bind(this)}>Switch List</button>
-        <p>Current List: {this.state.listId}</p>
+      <div className="row">
+        <div className="col-lg-6">
+          <div className="input-group">
+            <input className="form-control" type="text" value={this.state.listId}
+              onChange={(event) => this.onHandleChange(event)}></input>
+              <span className="input-group-btn">
+                <button className='btn btn-primary Button' onClick={this.onChangeListId.bind(this)}>Switch List</button>
+              </span>
+            <p>Current List: {this.state.listId}</p>
+          </div>
+        </div>
       </div>
     );
   }
